@@ -1,5 +1,6 @@
 services:
   data-analysis:
+    container_name: workspace
     image: data-analysis:latest
     platform: linux/amd64
     build:
