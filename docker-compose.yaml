@@ -1,0 +1,20 @@
+services:
+  data-analysis:
+    image: data-analysis:latest
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: .dockerfile
+    environment:
+      - PATH=/root/.local/bin/:/workspace/.venv/bin:$PATH
+      - VIRTUAL_ENV=/workspace/.venv
+    working_dir: /workspace
+    volumes:
+      - .:/workspace
+      - ./data:/workspace/data
+      - /workspace/.venv
+    restart: unless-stopped
+    tty: true
+    stdin_open: true
+    command: >
+      sh -c "uv sync --frozen && exec tail -f /dev/null"
