@@ -1,6 +1,6 @@
 services:
   data-analysis:
-    container_name: workspace
+    container_name: data-analysis-workspace
     image: data-analysis:latest
     platform: linux/amd64
     build:
@@ -14,8 +14,37 @@ services:
       - .:/workspace
       - ./data:/workspace/data
       - /workspace/.venv
+    networks:
+      - data-analysis-network
     restart: unless-stopped
-    tty: true
     stdin_open: true
+    tty: true
     command: >
       sh -c "uv sync --frozen && exec tail -f /dev/null"
+
+  mariadb:
+    container_name: data-analysis-mariadb
+    image: registryhj/mariadb:10.11
+    platform: linux/amd64
+    environment:
+      - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
+      - MARIADB_USER=${MARIADB_USER}
+      - MARIADB_PASSWORD=${MARIADB_PASSWORD}
+      - MARIADB_DATABASE=${MARIADB_DATABASE}
+    ports:
+      - '3306:3306'
+    volumes:
+      - data-analysis-mariadb:/var/lib/mysql
+    networks:
+      - data-analysis-network
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+
+volumes:
+  data-analysis-mariadb:
+    driver: local
+
+networks:
+  data-analysis-network:
+    driver: bridge
