@@ -10,6 +10,8 @@ services:
       - PATH=/root/.local/bin/:/workspace/.venv/bin:$PATH
       - VIRTUAL_ENV=/workspace/.venv
     working_dir: /workspace
+    ports:
+      - '8501:8501'
     volumes:
       - .:/workspace
       - ./data:/workspace/data
