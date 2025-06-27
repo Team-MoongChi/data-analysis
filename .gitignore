@@ -9,9 +9,6 @@ Thumbs.db
 ### Python ###
 .venv/
 
-### Data ###
-data/
-
 ### ENVs ###
 .env
 .envs/
